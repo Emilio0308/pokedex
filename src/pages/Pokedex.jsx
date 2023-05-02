@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/pokedex/Header";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import PokemonCard from "../components/pokedex/PokemonCard";
+import { setNameTrainer } from "../store/slices/nametrainer.slice";
 
 const Pokedex = () => {
   const nameTrainer = useSelector((store) => store.nametrainer);
@@ -48,6 +49,10 @@ const Pokedex = () => {
     e.target.pokemonName.value =""
     //posiblemente crear useeffect de pokemonnamepara setear currentpage//
   };
+  const dispatch = useDispatch()
+  const handleLogOut = () => {
+    dispatch(setNameTrainer(""))
+  }
 
   useEffect(() => {
     const pokemonByName = pokemons.filter((pokemon) =>
@@ -101,10 +106,14 @@ const Pokedex = () => {
     <section className="min-h-screen">
       <Header />
       <section className="w-full max-w-[1024px] mx-auto p-3 flex flex-col gap-5">
-        <h3 className="text-3xl">
-            <span className="text-red-600">Welcome {nameTrainer}, </span> here
-            you can find your pokemon
-        </h3>
+        <div className="flex justify-between gap-2">
+          <h3 className="text-3xl">
+              <span className="text-red-600">Welcome {nameTrainer}, </span> here
+              you can find your pokemon
+          </h3>
+          <i className='bx bx-log-out-circle text-3xl cursor-pointer' onClick={handleLogOut}></i>
+        </div>
+        
         <section>
           <form onSubmit={handleSubmit} className="flex flex-wrap gap-5 justify-center">
             <div className="grid grid-cols-[1fr,_auto] flex-grow">
