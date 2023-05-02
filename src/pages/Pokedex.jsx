@@ -43,24 +43,48 @@ const Pokedex = () => {
 
   const {pokemonsInPage,lastPage, pagesInBlock} = paginationLogic()
 
+  const handleChangePage = (e) => {
+    const newPage = currentPage + eval(e.target.value)
+    if (newPage > 0 && newPage <= lastPage) {
+      setCurrentPage(newPage)
+    }
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setPokemonName(e.target.pokemonName.value.toLowerCase());
     e.target.pokemonName.value =""
-    //posiblemente crear useeffect de pokemonnamepara setear currentpage//
   };
   const dispatch = useDispatch()
   const handleLogOut = () => {
     dispatch(setNameTrainer(""))
   }
 
+  // useEffect(() => {
+  //   console.log("modifica pokemons")
+  //   const pokemonByName = pokemons.filter((pokemon) =>
+  //     pokemon.name.toLowerCase().includes(pokemonName)
+  //   );
+  //   setPokemons(pokemonByName);
+  // }, [pokemonName]);
+
+  // efecto para buscar por nombre dentro de todos los pokemons//
   useEffect(() => {
-    const pokemonByName = pokemons.filter((pokemon) =>
-      pokemon.name.toLowerCase().includes(pokemonName)
-    );
-    setPokemons(pokemonByName);
+    if (pokemonName) {
+      const url = "https://pokeapi.co/api/v2/pokemon?limit=1281";
+      axios
+        .get(url)
+        .then((res) => {
+          const pokemonByName = res.data.results.filter((pokemon) =>
+          pokemon.name.toLowerCase().includes(pokemonName)
+          );
+          setPokemons(pokemonByName);
+        })
+        .catch((err) => console.log(err));
+    }
   }, [pokemonName]);
 
+  //efecto para obtener todos los pokemons//
   useEffect(() => {
     const url = "https://pokeapi.co/api/v2/pokemon?limit=1281";
     axios
@@ -71,6 +95,7 @@ const Pokedex = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  // efecto para obtener los types de los pokemons//
   useEffect(() => {
     const url = "https://pokeapi.co/api/v2/type";
     axios
@@ -82,6 +107,7 @@ const Pokedex = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  // efecto para obtener filtrar por types entre todos los pokemons//
   useEffect(() => {
     if (currentType) {
       const url = `https://pokeapi.co/api/v2/type/${currentType}/`;
@@ -129,11 +155,13 @@ const Pokedex = () => {
               onChange={(e) => setCurrentType(e.target.value)}
               className="w-[100%] sm:w-[40%] h-[60px] shadow-md shadow-gray-500/20"
             >
-              {types?.map((type) => (
+              {
+              types?.map((type) => (
                 <option value={type} key={type}>
                   {type}
                 </option>
-              ))}
+              ))
+              }
             </select>
           </form>
         </section>
@@ -141,14 +169,16 @@ const Pokedex = () => {
         {/* paginacion */}
         <div>
           <ul className="flex gap-5 justify-center">
-
+            <button onClick={ () => setCurrentPage(1)}>{"<<"}Star</button>
+            <button onClick={handleChangePage} value={-1}>{"<"}</button>
             {
               pagesInBlock.map( (numberPage) => 
               <li key={numberPage} onClick={()=> setCurrentPage(numberPage)} className={`cursor-pointer ${numberPage == currentPage && "bg-red-500"}`}>
                 {numberPage}
               </li> )
             }
-
+            <button onClick={handleChangePage} value={1}>{">"}</button>
+            <button onClick={() => setCurrentPage(lastPage)}>End{">>"}</button>
           </ul>
         </div>
 
