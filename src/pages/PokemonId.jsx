@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../components/pokedex/Header'
-import { useParams } from 'react-router-dom'
+import {  useParams } from 'react-router-dom'
 import axios from 'axios'
+import PokemonMove from '../components/pokedex/PokemonMove'
 
 const PokemonId = () => {
   const { id } = useParams()
   const [pokemonById, setPokemonById] = useState()
+  const [onShiny, setOnShiny] = useState(false)
+
+  const next = eval(pokemonById?.id + 1)
+  const prev = eval(pokemonById?.id - 1)
 
   const colorByType = {
     normal:"from-[#a4acaf] to-[#a4acaf]/70",
@@ -29,54 +34,66 @@ const PokemonId = () => {
     unknown:"from-[0000000] to-[0000000]/70",
     shadow:"from-[0000000] to-[0000000]/70",
   }
-
-
   const handleShiny = () => {
     setOnShiny(!onShiny)
   }
-  const [onShiny, setOnShiny] = useState(false)
-    useEffect(() => {
-      const url = `https://pokeapi.co/api/v2/pokemon/${id}`
-      axios.get(url)
-      .then( (res) => {
-        console.log(res.data)
-        setPokemonById(res.data)
-      })
-      .catch( (err) => console.log(err))
-    }, [])
+  
+  useEffect(() => {
+    const url = `https://pokeapi.co/api/v2/pokemon/${id}`
+    axios.get(url)
+    .then( (res) => {
+      setPokemonById(res.data)
+    })
+    .catch( (err) => console.log(err))
+  }, [])
     
   return (
     <section className='w-full'>
         <Header/>
         <section className='w-full max-w-[1024px] p-3 mx-auto'>
-          <div className={`w-full aspect-[5/2] flex justify-center relative items-center gap-4 bg-gradient-to-b ${colorByType[pokemonById?.types[0].type.name]}`}>
-
-            <div className='w-[40%] max-w-[400px] absolute bottom-[-25%]'>
-              <img className='w-full object-cover' src={onShiny?pokemonById?.sprites.other["official-artwork"].front_shiny:
-                pokemonById?.sprites.other.dream_world.front_default ?? pokemonById?.sprites.other["official-artwork"].front_default } alt="" />
+          {/* //div de imagenes// */}
+          <div className={`w-full h-[250px] flex justify-center relative items-center gap-4 bg-gradient-to-b ${colorByType[pokemonById?.types[0].type.name]} shadow-md shadow-gray-500 mt-[100px]`}>
+            <div className='h-[120%]  absolute bottom-[25%]'>
+              <img className='w-full h-full object-cover' src={onShiny?pokemonById?.sprites.other["official-artwork"].front_shiny:
+                 pokemonById?.sprites.other["official-artwork"].front_default ?? "/imagenes/pokemondefault.png" } alt="" />
             </div>
 
-            <div className='w-[10%] absolute left-[70%] flex flex-col items-center'>
-              <img className='object-cover border-[2px] border-gray-600 shadow-sm shadow-slate-600' src={onShiny ? pokemonById?.sprites.other["official-artwork"].front_default :
+            <div className='w-[15%] absolute right-[0] top-[1px] sm:left-[70%] sm:w-[6%] flex flex-col items-center'>
+              <img className='bg-white/70 object-cover border-[2px] border-gray-600 shadow-sm shadow-slate-600' src={onShiny ? pokemonById?.sprites.other["official-artwork"].front_default :
               pokemonById?.sprites.other["official-artwork"].front_shiny}
               alt="" />
               <i onClick={handleShiny} className='bx bx-sync cursor-pointer text-3xl'></i>
             </div>
           </div>
 
-          <article className='flex flex-col gap-2 justify-center items-center mt-[10%]'>
+          <article className='flex flex-col gap-2 justify-center items-center mt-[60px] relative'>
+            
+            {
+              prev > 1 && <a className='absolute top-0 left-0 text-2xl' href={`/pokedex/${prev}`}>
+                <i className='bx bxs-left-arrow'></i>
+                #{prev}
+                </a>
+            }
+
+            {
+              next < 10272 && <a className='absolute top-0 right-0 text-2xl' href={`/pokedex/${next}`}>
+              #{next}
+              <i className='bx bxs-right-arrow'></i>
+            </a>
+            }
             <h2 className='text-4xl px-2 border-gray-400 border-[1px]'><span>#</span>{pokemonById?.id}</h2>
             <h3 className='text-3xl uppercase'>{pokemonById?.name}</h3>
             <div className='grid grid-cols-2 gap-6'>
-              <div className='grid grid-rows-2 p-2 justify-items-center'><span>peso</span>{pokemonById?.weight}</div>
-              <div className='grid grid-rows-2 p-2 justify-items-center'><span>altura</span>{pokemonById?.height}</div>
+              <div className='grid grid-rows-2 p-2 justify-items-center'><span>Peso</span>{pokemonById?.weight}</div>
+              <div className='grid grid-rows-2 p-2 justify-items-center'><span>Altura</span>{pokemonById?.height}</div>
             </div>
+            {/* tipos y habilidades */}
             <article className='w-full grid grid-cols-2 gap-4'>
                 <div className='grid grid-rows-3 gap-3 justify-items-center sm:grid-rows-2 sm:grid-cols-2'>
                   <h4 className='sm:col-span-2 text-2xl font-semibold'>Tipo</h4>
                   {
                       pokemonById?.types.map( (type)=> (
-                        <div className='w-full text-center py-2 capitalize' key={type.type.name}>
+                        <div className={`w-full text-center max-h-[42px] py-2 capitalize bg-gradient-to-b ${colorByType[type.type.name]}`} key={type.type.name}>
                           {type.type.name}
                         </div>))
                     }
@@ -91,8 +108,8 @@ const PokemonId = () => {
           </article>
 
 
-          <section>
-            <h3 className='text-5xl'>stats</h3>
+          <section className='STATS'>
+            <h3 className='text-5xl'>Stats</h3>
             <section>
               {
                 pokemonById?.stats.map( (stat) => {
@@ -100,7 +117,7 @@ const PokemonId = () => {
                   return ( 
                     <article key={stat.stat.name}>
                       <section className='flex justify-between'>
-                        <span>{stat.stat.name}</span>
+                        <span className='capitalize'>{stat.stat.name}</span>
                         <span>{ stat.base_stat}/255</span>
                       </section>
                       <div className='bg-gray-100 h-6 rounded-sm w-full'>
@@ -113,6 +130,17 @@ const PokemonId = () => {
               }
             </section>
           </section>
+
+          <h3 className='mt-[60px] font-medium uppercase'>Don't forget to look at your Pokémon's moves</h3>
+          <section className='MOVIMIENTOS grid auto-rows-auto grid-cols-[repeat(auto-fill,minmax(160px,_1fr))] grid-rows-[auto] content-center  justify-items-center items-center justify-around gap-4 mt-[20px]'>
+
+            {
+              pokemonById?.moves.map( (move) =>
+               <PokemonMove key={move.move.url} move={move}/>)
+            }
+
+          </section>
+        
         </section>
     </section>
   )

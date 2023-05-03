@@ -55,6 +55,7 @@ const Pokedex = () => {
     setPokemonName(e.target.pokemonName.value.toLowerCase());
     e.target.pokemonName.value =""
   };
+
   const dispatch = useDispatch()
   const handleLogOut = () => {
     dispatch(setNameTrainer(""))
@@ -134,7 +135,7 @@ const Pokedex = () => {
       <section className="w-full max-w-[1024px] mx-auto p-3 flex flex-col gap-5">
         <div className="flex justify-between gap-2">
           <h3 className="text-3xl">
-              <span className="text-red-600">Welcome {nameTrainer}, </span> here
+              <span className="text-red-600 capitalize">Welcome {nameTrainer}, </span> here
               you can find your pokemon
           </h3>
           <i className='bx bx-log-out-circle text-3xl cursor-pointer' onClick={handleLogOut}></i>
@@ -142,12 +143,12 @@ const Pokedex = () => {
         
         <section>
           <form onSubmit={handleSubmit} className="flex flex-wrap gap-5 justify-center">
-            <div className="grid grid-cols-[1fr,_auto] flex-grow">
+            <div className="flex flex-wrap gap-2 flex-grow">
               <input
                 id="pokemonName"
                 type="text"
                 placeholder="search your pokemon"
-                className="shadow-md shadow-gray-500/20 px-3"
+                className="shadow-md shadow-gray-500/20 px-3 h-[60px] flex-grow"
               />
               <button className="h-[60px] w-[150px] bg-red-600">search</button>
             </div>
@@ -168,17 +169,18 @@ const Pokedex = () => {
 
         {/* paginacion */}
         <div>
-          <ul className="flex gap-5 justify-center">
-            <button onClick={ () => setCurrentPage(1)}>{"<<"}Star</button>
+          <ul className="flex gap-2 justify-center">
+            <button onClick={ () => setCurrentPage(1)}>{"<<"}</button>
             <button onClick={handleChangePage} value={-1}>{"<"}</button>
             {
               pagesInBlock.map( (numberPage) => 
-              <li key={numberPage} onClick={()=> setCurrentPage(numberPage)} className={`cursor-pointer ${numberPage == currentPage && "bg-red-500"}`}>
+              <div key={numberPage} onClick={()=> setCurrentPage(numberPage)} 
+              className={`cursor-pointer ${numberPage == currentPage? "bg-red-500 ": "bg-gray-400"} w-[24px] h-[24px]  p-1  flex justify-center items-center rounded-md hover:bg-red-400`}>
                 {numberPage}
-              </li> )
+              </div> )
             }
             <button onClick={handleChangePage} value={1}>{">"}</button>
-            <button onClick={() => setCurrentPage(lastPage)}>End{">>"}</button>
+            <button onClick={() => setCurrentPage(lastPage)}>{">>"}</button>
           </ul>
         </div>
 

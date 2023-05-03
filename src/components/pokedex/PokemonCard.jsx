@@ -74,7 +74,7 @@ const PokemonCard = ( {pokemonurl}) => {
             <h4 className='capitalize'>{types}</h4>
             <span className='text-sm text-gray-700/80'>type</span>
             <hr className='my-2' />
-            <section className='grid grid-cols-3 grid-rows-2'>
+            <section className='grid grid-cols-3 grid-rows-2 text-sm'>
                 {
                     pokemon?.stats.map( (stat) => (
                         <div key={stat.stat.name}>
