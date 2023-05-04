@@ -9,7 +9,7 @@ import Move from "./pages/Move";
 
 function App() {
   return (
-    <section className="overflow-hidden">
+    <section className="overflow-hidden font-Roboto">
       <Routes>
 
         <Route path="/" element={<Home />} />

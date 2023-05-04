@@ -3,14 +3,26 @@ import Header from '../components/pokedex/Header'
 import {  useParams } from 'react-router-dom'
 import axios from 'axios'
 import PokemonMove from '../components/pokedex/PokemonMove'
+import Evol from '../components/pokedex/Evol'
 
 const PokemonId = () => {
   const { id } = useParams()
   const [pokemonById, setPokemonById] = useState()
   const [onShiny, setOnShiny] = useState(false)
+  const [evolutionChain, setEvolutionChain] = useState("")
 
   const next = eval(pokemonById?.id + 1)
   const prev = eval(pokemonById?.id - 1)
+
+  useEffect(() => {
+    if (pokemonById) {
+      const url = pokemonById?.species.url
+      axios.get(url)
+    .then( (res) => setEvolutionChain(res.data.evolution_chain.url))
+    .catch( (err) => console.log(err))
+    }
+  }, [pokemonById])
+  
 
   const colorByType = {
     normal:"from-[#a4acaf] to-[#a4acaf]/70",
@@ -69,17 +81,19 @@ const PokemonId = () => {
           <article className='flex flex-col gap-2 justify-center items-center mt-[60px] relative'>
             
             {
-              prev > 1 && <a className='absolute top-0 left-0 text-2xl' href={`/pokedex/${prev}`}>
+              prev >= 1 && 
+              <a className='absolute top-0 left-0 text-2xl' href={`/pokedex/${prev}`}>
                 <i className='bx bxs-left-arrow'></i>
-                #{prev}
-                </a>
+                <span className='opacity-0 invisible sm:opacity-100 sm:visible'>#{prev}</span>
+              </a>
             }
 
             {
-              next < 10272 && <a className='absolute top-0 right-0 text-2xl' href={`/pokedex/${next}`}>
-              #{next}
-              <i className='bx bxs-right-arrow'></i>
-            </a>
+              next < 10272 &&
+              <a className='absolute top-0 right-0 text-2xl' href={`/pokedex/${next}`}>
+                <span className='opacity-0 invisible sm:opacity-100 sm:visible'>#{next}</span>
+                <i className='bx bxs-right-arrow'></i>
+              </a>
             }
             <h2 className='text-4xl px-2 border-gray-400 border-[1px]'><span>#</span>{pokemonById?.id}</h2>
             <h3 className='text-3xl uppercase'>{pokemonById?.name}</h3>
@@ -129,6 +143,12 @@ const PokemonId = () => {
                 })
               }
             </section>
+          </section>
+
+          {/* EVOLUTION CHAIN */}
+
+          <section>
+            <Evol url={evolutionChain} name={pokemonById?.name} />
           </section>
 
           <h3 className='mt-[60px] font-medium uppercase'>Don't forget to look at your Pokémon's moves</h3>

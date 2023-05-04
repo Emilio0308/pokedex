@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Header from "../components/pokedex/Header";
 
 const Move = () => {
@@ -64,12 +64,12 @@ const Move = () => {
           </h4>
           <div className="grid auto-rows-auto grid-cols-[repeat(auto-fill,minmax(160px,_1fr))] gap-3 justify-items-center">
             {move?.learned_by_pokemon.map((pokemon) => (
-              <div
-                className="capitalize h-[40px] bg-gray-400 w-full max-w-[220px] text-center p-1"
+              <Link to= {`/pokedex/${pokemon.name}`} 
+                className="capitalize h-[40px] bg-gray-400 w-full max-w-[220px] text-center p-1 hover:tracking-widest hover:bg-gray-300"
                 key={pokemon.url}
               >
                 {pokemon.name}
-              </div>
+              </Link>
             ))}
           </div>
         </article>
