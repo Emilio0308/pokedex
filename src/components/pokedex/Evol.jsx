@@ -15,7 +15,6 @@ const Evol = ({ url, name }) => {
             newChain.push(chain.species.name) 
             newChain.push(chain.evolves_to[0]?.species.name)
             newChain.push(chain.evolves_to[0]?.evolves_to[0]?.species.name)
-            console.log(newChain)
           setChain(newChain);
         })
         .catch((err) => console.log(err));
