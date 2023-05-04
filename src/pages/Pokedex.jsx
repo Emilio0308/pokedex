@@ -20,7 +20,7 @@ const Pokedex = () => {
     const sliceStar = (currentPage-1) * POKEMONS_X_PAGE
     const sliceEnd = sliceStar + POKEMONS_X_PAGE
 
-    const pokemonsInPage = pokemons.slice(sliceStar,sliceEnd)
+    const pokemonsInPage = pokemons.length >= 1 ? pokemons.slice(sliceStar,sliceEnd) : null
     //necesitamos saber cual es la ultima pagina//
     const lastPage = Math.ceil(pokemons.length/POKEMONS_X_PAGE)
     //incluir || en caso el valor sea 0 para asigarle 1//
@@ -186,9 +186,15 @@ const Pokedex = () => {
 
 
         <section className="grid grid-cols-[repeat(auto-fill,_minmax(250px,_1fr))] content-center items-center justify-center justify-items-center gap-5">
-          {pokemonsInPage?.map((pokemon) => (
-            <PokemonCard pokemonurl={pokemon.url} key={pokemon.url} />
-          ))}
+          {
+          pokemonsInPage ?  pokemonsInPage?.map((pokemon) => (
+            <PokemonCard pokemonurl={pokemon.url} key={pokemon.url} /> 
+            ))
+            :<div className="w-full col-span-3 p-3 font-semibold text-center">
+              <span>We can´t find your pokemon</span>
+              <img  src="/imagenes/pikachudetective.jpg" alt="" />
+            </div>
+          }
         </section>
       </section>
     </section>

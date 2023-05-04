@@ -25,7 +25,7 @@ const Home = () => {
                     <h2 className='text-5xl text-red-500 font-bold text-center'>Hello Trainer!</h2>
                     <p className='font-bold text-center'>Give your name to star</p>
                 </div>
-                <form onSubmit={hanldeSubmit} className='w-[100%] flex flex-wrap'>
+                <form onSubmit={hanldeSubmit} className='w-[100%] flex flex-wrap gap-4'>
                     <input id='nameTrainer' type="text" className='outline-none flex-1 shadow-md p-3' />
                     <button className='bg-red-500 p-3 text-white w-[200px]'>Star</button>
                 </form>
