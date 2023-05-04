@@ -43,8 +43,8 @@ const Pokedex = () => {
 
   const {pokemonsInPage,lastPage, pagesInBlock} = paginationLogic()
 
-  const handleChangePage = (e) => {
-    const newPage = currentPage + eval(e.target.value)
+  const handleChangePage = (num) => {
+    const newPage = currentPage + eval(num)
     if (newPage > 0 && newPage <= lastPage) {
       setCurrentPage(newPage)
     }
@@ -171,7 +171,7 @@ const Pokedex = () => {
         <div>
           <ul className="flex gap-2 justify-center items-center">
             <button onClick={ () => setCurrentPage(1)}><i className='bx bx-chevrons-left text-4xl' ></i></button>
-            <button onClick={handleChangePage} value={-1}><i className='bx bx-chevron-left text-4xl'></i></button>
+            <button onClick={() => handleChangePage(-1)}><i className='bx bx-chevron-left text-4xl'></i></button>
             {
               pagesInBlock.map( (numberPage) => 
               <div key={numberPage} onClick={()=> setCurrentPage(numberPage)} 
@@ -179,8 +179,8 @@ const Pokedex = () => {
                 {numberPage}
               </div> )
             }
-            <button onClick={handleChangePage} value={1}><i className='bx bx-chevron-right text-4xl'></i></button>
-            <button onClick={() => setCurrentPage(lastPage)}><i class='bx bx-chevrons-right text-4xl' ></i></button>
+            <button onClick={() => handleChangePage(1)}><i className='bx bx-chevron-right text-4xl'></i></button>
+            <button onClick={() => setCurrentPage(lastPage)}><i className='bx bx-chevrons-right text-4xl' ></i></button>
           </ul>
         </div>
 
