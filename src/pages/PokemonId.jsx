@@ -53,8 +53,8 @@ const PokemonId = () => {
         <section className='w-full max-w-[1024px] p-3 mx-auto'>
           {/* //div de imagenes// */}
           <div className={`w-full h-[250px] flex justify-center relative items-center gap-4 bg-gradient-to-b ${colorByType[pokemonById?.types[0].type.name]} shadow-md shadow-gray-500 mt-[100px]`}>
-            <div className='h-[120%]  absolute bottom-[25%]'>
-              <img className='w-full h-full object-cover' src={onShiny?pokemonById?.sprites.other["official-artwork"].front_shiny:
+            <div className='h-[300px]  absolute bottom-[25%] p-5'>
+              <img className='w-full h-full object-contain' src={onShiny?pokemonById?.sprites.other["official-artwork"].front_shiny:
                  pokemonById?.sprites.other["official-artwork"].front_default ?? "/imagenes/pokemondefault.png" } alt="" />
             </div>
 
