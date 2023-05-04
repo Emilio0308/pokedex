@@ -23,13 +23,13 @@ const Evol = ({ url, name }) => {
   }, [url]);
 
   return (
-    <section className="flex flex-col justify-center items-center gap-6">
-      <h4>Chain evolution</h4>
+    <section className="flex flex-col justify-center items-center gap-6 mt-6">
+      <h4 className="text-2xl font-semibold">Chain Evolution</h4>
       <article className="flex flex-wrap w-full justify-around gap-5 items-center">
         {
         chain?.map((eslabon) => {
             if (eslabon) return <a href={`/pokedex/${eslabon}`}
-             className={`w-[150px] p-4 capitalize rounded-md ${name.toLowerCase() == eslabon ? "bg-red-600": "bg-red-400"}`} key={eslabon}> {eslabon}</a> 
+             className={`w-[150px] text-center p-4 capitalize rounded-md ${name.toLowerCase() == eslabon ? "bg-red-600": "bg-red-400"}`} key={eslabon}> {eslabon}</a> 
         })
         }
       </article>
